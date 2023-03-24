@@ -51,4 +51,29 @@ enterButton.click()
     #remoteOption.click()
     #enterRemoteButton = driver.find_element(By.XPATH, "//button[@type='submit']")
     #enterRemoteButton.click()
+remoteButton = driver.find_element(value="filter-remotejob")
+remoteButton.click()
+if(len(driver.find_elements(By.XPATH, "//a[@class='yosegi-FilterPill-dropdownListItemLink']")) > 0):
+    print("This is true")
+    driver.find_element(By.XPATH, "//ul//li[@class='yosegi-FilterPill-dropdownListItem']//a[@tabindex='-1']").click()
+else:
+    print("That was not true")
+    remoteOption = driver.find_element(value="filter-remotejob-0")
+    if(remoteOption == True):
+        print("Acknowledge existence")
+    remoteOption.click()
+    enterRemoteButton = driver.find_element(By.XPATH, "//button[@form='filter-remotejob-menu']")
+    enterRemoteButton.click()
 
+
+#Filters by date
+dateFilter = driver.find_element(By.XPATH, "//div[@class='jobsearch-DesktopSort']//span//a")
+dateFilter.click()
+
+#Selects first job
+currentJobSelection = driver.find_element(By.XPATH, "//div[@class='job_seen_beacon']")
+currentJobSelection.click()
+
+#Stores information from position
+#jobDescription = driver.find_element(value="jobDescriptionText").text
+#print(jobDescription)
