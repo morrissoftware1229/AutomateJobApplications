@@ -11,3 +11,10 @@
 8. If value has automated answer, enter answer; else, prompt user for input  
 9. Submit application  
 10. Repeat from line 4  
+
+# Issues Encountered  
+
+1. Sometimes elements can't be found if you don't include wait time  
+2. Indeed may be performing A-B testing with remote option, so multiple scenarios had to be included  
+3. Dropdown options weren't selectable by id, so I had to use action chains  
+4. Text from location box needed to be cleared out with send_keys. Previously, my input was concatenated with default value  

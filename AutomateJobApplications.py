@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -21,7 +22,6 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 #locationToSearchIn = input("Please enter the location you would like to check in")
 #pathToResume = input("Please enter absolute path to resume")
 #remoteOption = input("Please enter 1 for remote or 0 for in-person")
-#print(remoteOption)
 
 #Navigates to Indeed.com
 driver.get("https://www.indeed.com/")
@@ -44,23 +44,16 @@ enterButton = driver.find_element(By.XPATH, "//button[@type='submit']")
 enterButton.click()
 
 #Sets jobs to remote if indicated by user
-#if(remoteOption == 1):
-    #remoteButton = Select(driver.find_element("filter-remotejob"))
-    #remoteButton.select_by_visible_text("Remote")
-    #remoteOption = driver.find_element("filter-remotejob-0")
-    #remoteOption.click()
-    #enterRemoteButton = driver.find_element(By.XPATH, "//button[@type='submit']")
-    #enterRemoteButton.click()
 remoteButton = driver.find_element(value="filter-remotejob")
 remoteButton.click()
+driver.implicitly_wait(2)
 if(len(driver.find_elements(By.XPATH, "//a[@class='yosegi-FilterPill-dropdownListItemLink']")) > 0):
-    print("This is true")
-    driver.find_element(By.XPATH, "//ul//li[@class='yosegi-FilterPill-dropdownListItem']//a[@tabindex='-1']").click()
+    action = ActionChains(driver)
+    action.send_keys(Keys.ARROW_DOWN)
+    action.send_keys(Keys.ENTER)
+    action.perform()
 else:
-    print("That was not true")
-    remoteOption = driver.find_element(value="filter-remotejob-0")
-    if(remoteOption == True):
-        print("Acknowledge existence")
+    remoteOption = driver.find_element(By.XPATH, "//label[@for='filter-remotejob-0']")
     remoteOption.click()
     enterRemoteButton = driver.find_element(By.XPATH, "//button[@form='filter-remotejob-menu']")
     enterRemoteButton.click()
@@ -73,7 +66,8 @@ dateFilter.click()
 #Selects first job
 currentJobSelection = driver.find_element(By.XPATH, "//div[@class='job_seen_beacon']")
 currentJobSelection.click()
+driver.implicitly_wait(2)
 
 #Stores information from position
-#jobDescription = driver.find_element(value="jobDescriptionText").text
-#print(jobDescription)
+jobDescription = driver.find_element(By.XPATH, "//div[@id='jobDescriptionText']")
+print(jobDescription.get_attribute("innerText"))
