@@ -18,3 +18,4 @@
 2. Indeed may be performing A-B testing with remote option, so multiple scenarios had to be included  
 3. Dropdown options weren't selectable by id, so I had to use action chains  
 4. Text from location box needed to be cleared out with send_keys. Previously, my input was concatenated with default value  
+5. Needed to capture keyboard input. Pulled a script from Stack Overflow, but needed to learn about the Win32API, Windows naming conventions, and C++ naming conventions.

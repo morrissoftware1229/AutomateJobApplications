@@ -1,7 +1,8 @@
+#Appears that I will only need to use startReading and stopReading after importing
+
 #Shamelessly stolen from Stack Overflow answer at https://stackoverflow.com/questions/13207678/whats-the-simplest-way-of-detecting-keyboard-input-in-a-script-from-the-termina
 #Importing necessary modules to capture keypress events
 import threading
-#Q: I cannot find STD_INPUT_HANDLE in the documentation. Based on the style, I think it comes from somewhere else.
 from win32api import STD_INPUT_HANDLE
 from win32console import GetStdHandle, KEY_EVENT, ENABLE_ECHO_INPUT, ENABLE_LINE_INPUT, ENABLE_PROCESSED_INPUT
 
@@ -15,7 +16,10 @@ class KeyAsyncReader():
         self.capturedChars = ""
 
         #Interesting style, a blank line was placed between the attributes and the methods
+        #This gets the STD_INPUT_HANDLE which defaults to CONIN$ meaning the Console Input Device (or keyboard and mouse)
         self.readHandle = GetStdHandle(STD_INPUT_HANDLE)
+        #The pipe here is probably binary OR operator, not a SET UNION operator
+        #This intercepts carriage returns, keyboard input, and (in addition to carriage returns) backspaces and new lines
         self.readHandle.SetConsoleMode(ENABLE_LINE_INPUT|ENABLE_ECHO_INPUT|ENABLE_PROCESSED_INPUT)
 
 
@@ -35,6 +39,7 @@ class KeyAsyncReader():
             self.readCallback = readCallback
 
             backgroundCaptureThread = threading.Thread(target=self.backgroundThreadReading)
+            #Daemonic threads are stopped abruptly at shutdown
             backgroundCaptureThread.daemon = True
             backgroundCaptureThread.start()
         except:
@@ -46,7 +51,6 @@ class KeyAsyncReader():
 
     def backgroundThreadReading(self):
         curEventLength = 0
-        curKeysLength = 0
         while True:
             eventsPeek = self.readHandle.PeekConsoleInput(10000)
 
