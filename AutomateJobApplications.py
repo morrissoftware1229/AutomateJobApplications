@@ -15,6 +15,8 @@ from selenium.webdriver.common.keys import Keys
 #Initial Selenium setup
 options = Options()
 options.add_experimental_option("detach", True)
+#This will need to be updated for different users
+options.add_argument("user-data-dir=C:\\Users\\morri\\AppData\\Local\\Google\\Chrome\\User Data\\")
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 #Get input from user
@@ -43,6 +45,15 @@ searchWhereBar.send_keys('United States')
 enterButton = driver.find_element(By.XPATH, "//button[@type='submit']")
 enterButton.click()
 
+#Signs into account
+if(len(driver.find_elements(By.XPATH, "//a[contains(@href, 'https://secure.indeed.com/account/login')]")) > 0):
+    signIn = driver.find_element(By.XPATH, "//a[contains(@href, 'https://secure.indeed.com/account/login')]")
+    signIn.click()
+    signIn.send_keys(Keys.SHIFT + Keys.TAB)
+    signIn.send_keys(Keys.SHIFT + Keys.TAB)
+    signIn.send_keys(Keys.SHIFT + Keys.TAB)
+    signIn.send_keys(Keys.ENTER)
+
 #Sets jobs to remote if indicated by user
 remoteButton = driver.find_element(value="filter-remotejob")
 remoteButton.click()
@@ -70,4 +81,14 @@ driver.implicitly_wait(2)
 
 #Stores information from position
 jobDescription = driver.find_element(By.XPATH, "//div[@id='jobDescriptionText']")
-print(jobDescription.get_attribute("innerText"))
+
+#Clicks apply now button
+driver.implicitly_wait(2)
+indeedApplyButton = driver.find_element(By.XPATH, "//button[@id='indeedApplyButton']")
+indeedApplyButton.click()
+
+#ISSUE - Multiple tabs are opening when clicking apply now button
+
+#Clicks the submit application button
+submitApplicationButton = driver.find_elements(By.XPATH, "//button[@class='ia-continueButton']")
+submitApplicationButton.click()
