@@ -74,21 +74,43 @@ else:
 dateFilter = driver.find_element(By.XPATH, "//div[@class='jobsearch-DesktopSort']//span//a")
 dateFilter.click()
 
-#Selects first job
-currentJobSelection = driver.find_element(By.XPATH, "//div[@class='job_seen_beacon']")
-currentJobSelection.click()
-driver.implicitly_wait(2)
+#Grabs all jobs
+allPotentialJobs = driver.find_elements(By.XPATH, "//div[@class='job_seen_beacon']")
 
-#Stores information from position
-jobDescription = driver.find_element(By.XPATH, "//div[@id='jobDescriptionText']")
+#Loop selects first job with apply now button
+for x in allPotentialJobs:
+    currentJobSelection = x
+    currentJobSelection.click()
 
-#Clicks apply now button
-driver.implicitly_wait(2)
-indeedApplyButton = driver.find_element(By.XPATH, "//button[@id='indeedApplyButton']")
-indeedApplyButton.click()
+    #Stores information from position
+    positionTitle = driver.find_element(By.XPATH, "//h2[contains(@class, 'jobTitle')]//a").get_property("innerText")
+    companyName = driver.find_element(By.XPATH, "//span[@class='companyName']//a").get_property("innerText")
+    #jobDescription = driver.find_element(By.XPATH, "//div[@id='jobDescriptionText']").get_property("innerText")
+    dateAndStatusOfJobPosting = driver.find_element(By.XPATH, "//span[contains(@class, 'myJobsState')]").get_property("innerText")
 
-#ISSUE - Multiple tabs are opening when clicking apply now button
+    #Clicks apply now button
+    driver.implicitly_wait(2)
+    if(len(driver.find_elements(By.XPATH, "//button[@aria-label='Apply now opens in a new tab']")) > 0):
+        indeedApplyButton = driver.find_element(By.XPATH, "//button[@aria-label='Apply now opens in a new tab']")
+        indeedApplyButton.click()
+        driver.implicitly_wait(2)
+    else:
+        continue
 
-#Clicks the submit application button
-submitApplicationButton = driver.find_elements(By.XPATH, "//button[@class='ia-continueButton']")
-submitApplicationButton.click()
+    #ISSUE - Multiple tabs are opening when clicking apply now button
+
+    #Clicks the submit application button
+    if(len(driver.find_elements(By.XPATH, "//button[@class='ia-continueButton']")) > 0):
+        # submitApplicationButton = driver.find_elements(By.XPATH, "//button[@class='ia-continueButton']")
+        # submitApplicationButton.click()
+        pass
+    else:
+        exitButton = driver.find_element(By.XPATH, "//button[contains(@class, 'css-1aftz8i']")
+        exitButton.click()
+        driver.implicitly_wait(2)
+        secondExitButton = driver.find_element(By.XPATH, "//button[@data-testid='ExitConfirmationModal-exit']")
+        secondExitButton.click()
+
+    #Debugging info - DELETE later
+    print(positionTitle, companyName, dateAndStatusOfJobPosting)
+    exit
