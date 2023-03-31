@@ -20,3 +20,4 @@
 4. Text from location box needed to be cleared out with send_keys. Previously, my input was concatenated with default value  
 5. Needed to capture keyboard input. Pulled a script from Stack Overflow, but needed to learn about the Win32API, Windows naming conventions, and C++ naming conventions.  
 6. Google Chrome doesn't allow test scripts to sign you into your profile, so user-data-dir needed to be added to options and a conditional sign-in to Indeed needed to be added  
+7. Had to learn how to switch focus on tabs and close no longer useful tabs  
